@@ -2,17 +2,23 @@ package se433_testing_project;
 
 public class TaxCalculator 
 {
-    public static double calculateTax(String state, double amount)
+
+    public static final double TAX_RATE = 0.06;
+
+    public static double calculateTax(String state, double amount) 
     {
-        if (state.toUpperCase().equals("IL") || state.toUpperCase().equals("CA") || state.toUpperCase().equals("NY"))
+        if (state == null) 
         {
-            return amount * 0.06;
+            return 0.0;
         }
-        else
+
+        String normalized = state.trim().toUpperCase();
+
+        if (normalized.equals("IL") || normalized.equals("CA") || normalized.equals("NY")) 
         {
-            return amount * 0.00;
+            return amount * TAX_RATE;
         }
+        
+        return 0.0;
     }
-
-
 }
