@@ -8,16 +8,12 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-/**
- * Smoke test for the bootstrap entry point. App.main() blocks on real
- * System.in, so it is exercised by temporarily redirecting the standard
- * streams and feeding a scripted session that completes a checkout. The
- * detailed behavior is unit-tested in MenuControllerTest, ConsoleInputTest,
- * and ConsoleOutputTest.
- */
-class AppTest {
+//smoke test
+class AppTest 
+{
     @Test
-    void mainRunsAFullSessionToCheckout() {
+    void mainRunsAFullSessionToCheckout() 
+    {
         String script = String.join("\n",
             "Alice",       // name
             "IL",          // state
@@ -32,16 +28,21 @@ class AppTest {
         InputStream originalIn = System.in;
         PrintStream originalOut = System.out;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        try {
+
+        try 
+        {
             System.setIn(new java.io.ByteArrayInputStream(script.getBytes(StandardCharsets.UTF_8)));
             System.setOut(new PrintStream(captured, true, StandardCharsets.UTF_8));
             App.main(new String[] {});
-        } finally {
+        } 
+        
+        finally 
+        {
             System.setIn(originalIn);
             System.setOut(originalOut);
         }
 
-        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("transaction completed"),
-            "a full scripted session should reach checkout");
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("transaction completed"), "a full scripted session should reach checkout");
+    
     }
 }

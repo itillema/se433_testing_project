@@ -33,7 +33,7 @@ public class MenuController
     }
 
     // menu action loop handler
-    boolean dispatch(String choice, ShoppingCart cart, OrderProcessor processor) 
+    public boolean dispatch(String choice, ShoppingCart cart, OrderProcessor processor)
     {
         switch (choice) 
         {
@@ -66,7 +66,7 @@ public class MenuController
         }
     }
 
-    void addItem(ShoppingCart cart) 
+    public void addItem(ShoppingCart cart)
     {
         try 
         {
@@ -83,12 +83,12 @@ public class MenuController
         }
     }
 
-    void viewCart(ShoppingCart cart) 
+    public void viewCart(ShoppingCart cart)
     {
         out.cartContents(cart.getItems(), cart.getRawTotal());
     }
 
-    void editQuantity(ShoppingCart cart) 
+    public void editQuantity(ShoppingCart cart)
     {
         try 
         {
@@ -105,13 +105,13 @@ public class MenuController
         }
     }
 
-    void removeItem(ShoppingCart cart) 
+    public void removeItem(ShoppingCart cart)
     {
         String name = in.promptNonEmpty("Name of item to remove: ");
         out.itemRemoved(cart.removeItem(name));
     }
 
-    void getTotal(OrderProcessor processor) 
+    public void getTotal(OrderProcessor processor)
     {
         try 
         {
@@ -124,7 +124,7 @@ public class MenuController
         }
     }
 
-    void checkout(OrderProcessor processor) 
+    public void checkout(OrderProcessor processor)
     {
         try 
         {

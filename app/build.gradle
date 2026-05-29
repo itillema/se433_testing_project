@@ -8,6 +8,12 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+
+    // Code coverage (bundled with Gradle).
+    id 'jacoco'
+
+    // Mutation testing. 1.19.0 supports Gradle 9 and the configuration cache.
+    id 'info.solidsoft.pitest' version '1.19.0'
 }
 
 repositories {
@@ -37,7 +43,45 @@ application {
     mainClass = 'se433_testing_project.App'
 }
 
+// JaCoCo 0.8.14 supports Java 21.
+jacoco {
+    toolVersion = '0.8.14'
+}
+
 tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+    // Use JUnit Platform for unit tests. Optionally filter by category tag,
+    // e.g. `gradlew test -PtestTags=unit`.
+    useJUnitPlatform {
+        if (project.hasProperty('testTags')) {
+            includeTags project.property('testTags')
+        }
+    }
+    // Always refresh the coverage report after running tests.
+    finalizedBy tasks.named('jacocoTestReport')
+}
+
+tasks.named('jacocoTestReport') {
+    dependsOn tasks.named('test')
+    reports {
+        html.required = true   // human-readable report to screenshot
+        xml.required  = true   // consumed by the VS Code Coverage Gutters extension
+    }
+}
+
+pitest {
+    // Required bridge for JUnit 5; without it PIT discovers 0 tests.
+    junit5PluginVersion = '1.2.1'
+    targetClasses = ['se433_testing_project.*']
+    targetTests   = ['se433_testing_project.*']
+    // The glob above also matches the test sub-packages; exclude them so PIT
+    // only mutates production code.
+    excludedClasses = [
+        'se433_testing_project.unit.*',
+        'se433_testing_project.integration.*',
+        'se433_testing_project.system.*',
+        'se433_testing_project.acceptance.*'
+    ]
+    outputFormats = ['HTML', 'XML']
+    timestampedReports = false   // stable path: build/reports/pitest/index.html
+    threads = 2
 }
