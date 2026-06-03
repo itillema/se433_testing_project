@@ -17,7 +17,7 @@ public class ConsoleOutput
 
     public void welcome() 
     {
-        out.println("=== Let's Shop ===");
+        out.println("=== Welcome to the Shopping Application ===");
     }
 
     public void menu() 
